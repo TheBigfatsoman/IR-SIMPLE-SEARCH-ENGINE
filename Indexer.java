@@ -26,10 +26,4 @@ public class Indexer {
             });
         }
     }
-
-    public static void main(String[] args) {
-        Indexer indexer = new Indexer();
-        indexer.invertedIndex("data/cran.all.1400");
-        System.out.println(indexer.getInvertedIndex().toString());
-    }
 }
