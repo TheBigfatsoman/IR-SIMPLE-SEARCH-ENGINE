@@ -4,19 +4,16 @@ import java.util.Map;
 
 public class Indexer {
 
-    private final Map<String, List<Integer>> invertedIndex = new HashMap<>();
     private final CranfieldParser parser = new CranfieldParser();
     private final Tokenizer tokenizer = new Tokenizer();
-
-    public Map<String, List<Integer>> getInvertedIndex() {
-        return invertedIndex;
-    }
     
     /**
      * Builds an inverted index from the documents in the specified file.
      * @param filePath The path to the file containing the documents to index.
+     * @return A map where the keys are tokens and the values are lists of document IDs that contain those tokens.
      */
-    public void invertedIndex(String filePath) {
+    public Map<String, List<Integer>> invertedIndex(String filePath) {
+        Map<String, List<Integer>> invertedIndex = new HashMap<>();
         List<Document> documents = parser.parseFile(filePath);
 
         while (!documents.isEmpty()) {
@@ -25,5 +22,7 @@ public class Indexer {
                 invertedIndex.computeIfAbsent(token, k -> new java.util.ArrayList<>()).add(Integer.parseInt(doc.id().substring(4)));
             });
         }
+
+        return invertedIndex;
     }
 }
