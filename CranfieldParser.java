@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.*;
 
+record Document(String id, String content) {}
+
 public class CranfieldParser {
 
     /**
