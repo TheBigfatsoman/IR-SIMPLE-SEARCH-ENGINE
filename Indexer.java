@@ -12,8 +12,12 @@ public class Indexer {
         return invertedIndex;
     }
     
-    private void invertedIndex() {
-        List<Document> documents = parser.parseFile("data/cran.all.1400");
+    /**
+     * Builds an inverted index from the documents in the specified file.
+     * @param filePath The path to the file containing the documents to index.
+     */
+    public void invertedIndex(String filePath) {
+        List<Document> documents = parser.parseFile(filePath);
 
         while (!documents.isEmpty()) {
             Document doc = documents.remove(0);
@@ -21,11 +25,5 @@ public class Indexer {
                 invertedIndex.computeIfAbsent(token, k -> new java.util.ArrayList<>()).add(Integer.parseInt(doc.id().substring(4)));
             });
         }
-    }
-
-    public static void main(String[] args) {
-        Indexer indexer = new Indexer();
-        indexer.invertedIndex();
-        System.out.println(indexer.getInvertedIndex().toString());
     }
 }

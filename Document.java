@@ -1,0 +1,1 @@
+public record Document(String id, String content) {}
