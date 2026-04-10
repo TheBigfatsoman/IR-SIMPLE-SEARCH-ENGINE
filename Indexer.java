@@ -5,23 +5,27 @@ import java.util.Map;
 public class Indexer {
 
     private final Map<String, List<Integer>> invertedIndex = new HashMap<>();
+    private final CranfieldParser parser = new CranfieldParser();
+    private final Tokenizer tokenizer = new Tokenizer();
 
-    private void tokenization() {
-
+    public Map<String, List<Integer>> getInvertedIndex() {
+        return invertedIndex;
     }
     
-    private void indexDocument() {
+    private void invertedIndex() {
+        List<Document> documents = parser.parseFile("data/cran.all.1400");
 
+        while (!documents.isEmpty()) {
+            Document doc = documents.remove(0);
+            tokenizer.tokenize(doc.content()).forEach(token -> {
+                invertedIndex.computeIfAbsent(token, k -> new java.util.ArrayList<>()).add(Integer.parseInt(doc.id().substring(4)));
+            });
+        }
     }
 
     public static void main(String[] args) {
-        CranfieldParser parser = new CranfieldParser();
-        List<Document> docs = parser.parseFile("data/cran.all.1400");
-        System.out.println("Successfully parsed " + docs.size() + " documents.");
-        
-        // Show the first document's content
-        if (!docs.isEmpty()) {
-            System.out.println("Sample Text: " + docs.get(3).content().substring(0, 100) + "...");
-        }
+        Indexer indexer = new Indexer();
+        indexer.invertedIndex();
+        System.out.println(indexer.getInvertedIndex().toString());
     }
 }
