@@ -146,6 +146,7 @@ public class TolerantSearch {
     // Wildcard search (prefix-based)
     // ==============================
     public static List<String> wildcardSearch(String pattern, Set<String> dictionary) {
+        // Lowercase the pattern prefix so it matches the lowercased dictionary
         String prefix = pattern.replace("*", "").toLowerCase();
         List<String> results = new ArrayList<>();
 
@@ -154,7 +155,6 @@ public class TolerantSearch {
                 results.add(word);
             }
         }
-
         return results;
     }
 
