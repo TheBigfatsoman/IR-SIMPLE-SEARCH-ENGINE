@@ -11,7 +11,7 @@ public class CranfieldParser {
      * @param filePath The path to the file to parse.
      * @return A list of Document objects.
      */
-    static List<Document> parseFile(String filePath) {
+    public List<Document> parseFile(String filePath) {
         List<Document> documents = new ArrayList<>();
         
         try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {

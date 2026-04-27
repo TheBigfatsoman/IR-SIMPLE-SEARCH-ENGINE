@@ -5,13 +5,8 @@ import java.util.Map;
 
 public class Indexer {
 
-    private final Map<String, List<Integer>> invertedIndex = new HashMap<>();
     private final CranfieldParser parser = new CranfieldParser();
     private final Tokenizer tokenizer = new Tokenizer();
-
-    public Map<String, List<Integer>> getInvertedIndex() {
-        return invertedIndex;
-    }
     
     public void invertedIndex() {
         // Change this path to match your file's location
@@ -32,11 +27,7 @@ public class Indexer {
                             .add(Integer.parseInt(doc.id().substring(4)));
             });
         }
-    }
 
-    public static void main(String[] args) {
-        Indexer indexer = new Indexer();
-        indexer.invertedIndex();
-        System.out.println(indexer.getInvertedIndex().toString());
+        return invertedIndex;
     }
 }
