@@ -34,6 +34,13 @@ public class TolerantSearch {
     // Suggest closest word
     // ==============================
     public static String correctWord(String input, Set<String> dictionary) {
+        String lowerInput = input.toLowerCase();
+        
+        // 0. Operator Typo Protection (NEW)
+        // If it's 1 edit away from an operator, assume it's an operator
+        if (levenshtein(lowerInput, "and") <= 1) return "AND";
+        if (levenshtein(lowerInput, "or") <= 1) return "OR";
+        if (levenshtein(lowerInput, "not") <= 1) return "NOT";
 
         // 1. Exact match
         if (dictionary.contains(input)) return input;
@@ -69,14 +76,21 @@ public class TolerantSearch {
     public static String processQuery(String query, Set<String> dictionary) {
         StringBuilder result = new StringBuilder();
 
-        String[] parts = query.split(" ");
+        // Use regex to keep parentheses as separate tokens
+        // This splits by spaces, OR at the boundaries of ( and ) using lookahead/lookbehind
+        // (?=[()]) matches a position before a parenthesis
+        // (?<=[()]) matches a position after a parenthesis
+        String[] parts = query.split("(?=[()])|(?<=[()])|\\s+");
 
         for (String part : parts) {
+            if (part.trim().isEmpty()) continue;
 
-            // Keep boolean operators unchanged
+            // Keep boolean operators and parentheses unchanged
             if (part.equalsIgnoreCase("AND") ||
                 part.equalsIgnoreCase("OR") ||
-                part.equalsIgnoreCase("NOT")) {
+                part.equalsIgnoreCase("NOT") ||
+                part.equals("(") ||
+                part.equals(")")) {
 
                 result.append(part.toUpperCase()).append(" ");
             }

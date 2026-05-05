@@ -23,8 +23,11 @@ public class Tokenizer {
             return Collections.emptyList();
         }
 
+        // Split by whitespace
         String[] tokens = text.toLowerCase().split("\\s+");
+        
         return Arrays.stream(tokens)
+                     .map(token -> token.replaceAll("[^a-z0-9]", "")) // Strip all non-alphanumeric
                      .filter(token -> !token.isEmpty())
                      .filter(token -> !STOP_WORDS.contains(token))
                      .collect(Collectors.toList());
