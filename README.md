@@ -18,3 +18,23 @@ Peran 3: Tolerant Retrieval Specialist
 Fokus membangun fitur fleksibilitas pencarian, seperti k-gram index untuk menangani
 wildcard, atau implementasi perhitungan Levenshtein Distance untuk rekomendasi kata
 jika query salah ketik.
+
+## How to Run
+
+1. **Compilation**
+   Compile all Java source files in the project root:
+   ```bash
+   javac *.java
+   ```
+
+2. **Execution**
+   Run the `Main` class:
+   ```bash
+   java Main
+   ```
+
+3. **Usage**
+   Follow the menu prompts to:
+   - View a sample of the Inverted Index.
+   - Perform Boolean queries with Tolerant Search features.
+   - Exit the application.
