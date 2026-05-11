@@ -45,14 +45,7 @@ public class TolerantSearch {
         // 1. Exact match
         if (dictionary.contains(input)) return input;
 
-        // 2. Prefix match (NEW)
-        for (String word : dictionary) {
-            if (word.startsWith(input)) {
-                return word;
-            }
-        }
-
-        // 3. Levenshtein fallback
+        // 2. Levenshtein fallback
         String bestWord = input;
         int minDist = Integer.MAX_VALUE;
 
@@ -125,30 +118,8 @@ public class TolerantSearch {
 
                 // 2. Prefix matches (NEW)
                 else {
-                    List<String> matches = getPrefixMatches(lower, dictionary);
-
-                    if (matches.size() > 1) {
-                        // multiple → (a OR b OR c)
-                        result.append("(");
-                        for (int i = 0; i < matches.size(); i++) {
-                            result.append(matches.get(i));
-                            if (i < matches.size() - 1) {
-                                result.append(" OR ");
-                            }
-                        }
-                        result.append(") ");
-                    }
-
-                    else if (matches.size() == 1) {
-                        // single → just use it
-                        result.append(matches.get(0)).append(" ");
-                    }
-
-                    // 3. Fallback → Levenshtein
-                    else {
-                        String fixed = correctWord(lower, dictionary);
-                        result.append(fixed).append(" ");
-                    }
+                    String fixed = correctWord(lower, dictionary);
+                    result.append(fixed).append(" ");
                 }
             }
         }
