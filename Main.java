@@ -111,7 +111,7 @@ public class Main {
                     String query = sc.nextLine();
                     System.out.print("Top-k results: ");
                     int k = parseIntSafe(sc.nextLine(), 10);
- 
+
                     List<BIMEngine.ScoredDoc> res = bimEngine.search(query, k);
                     printRankedResults("BIM Search", res);
 
