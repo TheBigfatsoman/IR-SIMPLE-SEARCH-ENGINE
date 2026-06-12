@@ -27,6 +27,10 @@ public class TP_Ranker {
         return Math.log(pi / (1.0 - pi)) + tf * Math.log(lambda1 / lambda2) - (lambda1 - lambda2);
     }
 
+    /**
+     * @param List<String> the query
+     * @return Map<Integer, Double> map of the document number to it's score sorted high to low
+     */
     public Map<Integer, Double> rank(List<String> queryTerms) {
         Map<Integer, Double> scores = new HashMap<>();
 

@@ -16,7 +16,7 @@ public class Tokenizer {
     /**
      * Tokenizes the input text into a list of tokens, removing stop words and punctuation.
      * @param text sentences to be tokenized
-     * @return a list of strings of tokens
+     * @return List<String> a list of strings of tokens
      */
     public List<String> tokenize(String text) {
         if (text == null) {
