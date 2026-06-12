@@ -3,10 +3,10 @@ public class TP_Util {
         double f = 1.0;
 
         for (int i = 2; i <= n; i++) {
-            f *= i
+            f *= i;
         }
 
-        return f
+        return f;
     } 
 
     public static double poisson(int k, double lambda) {
