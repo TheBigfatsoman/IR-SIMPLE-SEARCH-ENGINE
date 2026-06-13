@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -28,8 +26,8 @@ public class TP_Ranker {
     }
 
     /**
-     * @param List<String> the query
-     * @return Map<Integer, Double> map of the document number to it's score sorted high to low
+     * @param queryTerms list of query to rank
+     * @return Map of the document number to it's score sorted high to low
      */
     public Map<Integer, Double> rank(List<String> queryTerms) {
         Map<Integer, Double> scores = new HashMap<>();
@@ -46,20 +44,6 @@ public class TP_Ranker {
             }
         }
 
-        return sort(scores);
-    }
-
-    private Map<Integer, Double> sort(Map<Integer, Double> scores) {
-        List<Map.Entry<Integer, Double>> entries = new ArrayList<>(scores.entrySet());
-
-        entries.sort((a,b) -> Double.compare(b.getValue(), a.getValue()));
-
-        Map<Integer, Double> result = new LinkedHashMap<>();
-
-        for (Map.Entry<Integer, Double> e : entries) {
-            result.put(e.getKey(), e.getValue());
-        }
-
-        return result;
+        return TP_Util.sort(scores);
     }
 }

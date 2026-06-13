@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -55,6 +56,8 @@ public class Main {
 
             int command = sc.nextInt();
             sc.nextLine(); // consume the newline character
+
+            List<String> tokenizedQuery = new ArrayList<>();
 
             switch (command) {
                 case 1:
@@ -126,7 +129,7 @@ public class Main {
                     System.out.println("Enter Query: ");
                     rawQuery = sc.nextLine();
                     TP_Ranker tp = new TP_Ranker(indexer);
-                    List<String> tokenizedQuery = tokenizer.tokenize(rawQuery);
+                    tokenizedQuery = tokenizer.tokenize(rawQuery);
                     Map<Integer, Double> ranking = tp.rank(tokenizedQuery);
 
                     printResult(ranking);
@@ -135,6 +138,14 @@ public class Main {
                     sc.nextLine();
                     break;
                 case 5:
+                    System.out.println("Enter Query: ");
+                    rawQuery = sc.nextLine();
+                    BM25 bm = new BM25(indexer);
+                    tokenizedQuery = tokenizer.tokenize(rawQuery);
+                    ranking = bm.rank(tokenizedQuery);
+
+                    printResult(ranking);
+
                     // Keep at bottom
                     System.out.print("\nPress Enter to return to menu...");
                     sc.nextLine();

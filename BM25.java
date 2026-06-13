@@ -39,6 +39,11 @@ public class BM25 {
         return idf * ((tf * (k1 + 1)) / norm);
     }
 
+    /**
+     * Ranks the documents based on the input using BM25
+     * @param queryTerms list of the query
+     * @return Map of the docID to the score to the query
+     */
     public Map<Integer, Double> rank (List<String> queryTerms) {
         Map<Integer, Double> scores = new HashMap<>();
 
