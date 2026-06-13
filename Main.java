@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -11,6 +13,7 @@ public class Main {
 
         // 1. Initialize Peran 1's Indexer
         Indexer indexer = new Indexer();
+        Tokenizer tokenizer = new Tokenizer();
         indexer.invertedIndex();
         System.out.println("Documents loaded : " + indexer.getN());
         System.out.printf ("Average doc len  : %.2f tokens%n", indexer.getAvgdl());
@@ -53,6 +56,8 @@ public class Main {
 
             int command = sc.nextInt();
             sc.nextLine(); // consume the newline character
+
+            List<String> tokenizedQuery = new ArrayList<>();
 
             switch (command) {
                 case 1:
@@ -111,7 +116,7 @@ public class Main {
                     String query = sc.nextLine();
                     System.out.print("Top-k results: ");
                     int k = parseIntSafe(sc.nextLine(), 10);
- 
+
                     List<BIMEngine.ScoredDoc> res = bimEngine.search(query, k);
                     printRankedResults("BIM Search", res);
 
@@ -121,11 +126,26 @@ public class Main {
 
                 // 4 and 5 for peran 2
                 case 4:
+                    System.out.println("Enter Query: ");
+                    rawQuery = sc.nextLine();
+                    TP_Ranker tp = new TP_Ranker(indexer);
+                    tokenizedQuery = tokenizer.tokenize(rawQuery);
+                    Map<Integer, Double> ranking = tp.rank(tokenizedQuery);
+
+                    printResult(ranking);
                     // Keep at bottom
                     System.out.print("\nPress Enter to return to menu...");
                     sc.nextLine();
                     break;
                 case 5:
+                    System.out.println("Enter Query: ");
+                    rawQuery = sc.nextLine();
+                    BM25 bm = new BM25(indexer);
+                    tokenizedQuery = tokenizer.tokenize(rawQuery);
+                    ranking = bm.rank(tokenizedQuery);
+
+                    printResult(ranking);
+
                     // Keep at bottom
                     System.out.print("\nPress Enter to return to menu...");
                     sc.nextLine();
@@ -137,7 +157,7 @@ public class Main {
                     System.out.print("\nPress Enter to return to menu...");
                     sc.nextLine();
                     break;
-   
+
                 case 0:
                     System.out.println("Exiting...");
                     sc.close();
@@ -162,7 +182,25 @@ public class Main {
             System.out.printf("%-4d  Doc-%04d    %.6f%n", i + 1, sd.docId(), sd.score());
         }
     }
- 
+
+    private static <T, E> void printResult(Map<T,E> results) {
+        System.out.println("\n - Top " + results.size() + " results:");
+        if (results.isEmpty()) {
+            System.out.println("(no results found)");
+            return;
+        }
+
+        System.out.println("No.     DocId       Score");
+        System.out.println("================================");
+        int counter = 1;
+        for (Map.Entry<T,E> entry : results.entrySet()) {
+            T key = entry.getKey();
+            E value = entry.getValue();
+            System.out.println(counter + "        " + key + "       " + value);
+            counter++;
+        }
+    }
+
     private static int parseIntSafe(String s, int defaultVal) {
         try { 
             return Integer.parseInt(s.trim()); 

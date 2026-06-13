@@ -29,31 +29,31 @@ public class Indexer {
     public int getTf(String term, int docId) {
         return tfIndex.getOrDefault(term, Collections.emptyMap()).getOrDefault(docId, 0);
     }
- 
+
     public Map<Integer, Integer> getPostings(String term) {
         return tfIndex.getOrDefault(term, Collections.emptyMap());
     }
- 
+
     public int getDf(String term) {
         return df.getOrDefault(term, 0);
     }
- 
+
     public int getDocLength(int docId) {
         return docLength.getOrDefault(docId, 0);
     }
- 
+
     public double getAvgdl() { 
         return avgdl; 
     }
- 
+
     public int getN() { 
         return N; 
     }
- 
+
     public List<Integer> getDocIds() { 
         return Collections.unmodifiableList(docIds); 
     }
- 
+
     public Set<String> getVocabulary() { 
         return tfIndex.keySet(); 
     }
