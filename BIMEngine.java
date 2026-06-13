@@ -2,7 +2,7 @@ import java.util.*;
 
 public class BIMEngine {
     private final Indexer indexer;
- 
+
     public record ScoredDoc(int docId, double score) {}
 
     public BIMEngine(Indexer indexer) {
