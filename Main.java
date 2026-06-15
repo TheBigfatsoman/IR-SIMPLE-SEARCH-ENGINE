@@ -11,7 +11,6 @@ public class Main {
 
         // 1. Initialize Peran 1's Indexer
         Indexer indexer = new Indexer();
-        Tokenizer tokenizer = new Tokenizer();
         indexer.invertedIndex();
         System.out.println("Documents loaded : " + indexer.getN());
         System.out.printf("Average doc len  : %.2f tokens%n", indexer.getAvgdl());
