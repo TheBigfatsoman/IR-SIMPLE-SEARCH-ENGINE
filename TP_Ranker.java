@@ -6,31 +6,27 @@ import java.util.Map;
 public class TP_Ranker {
 
     private final Indexer indexer;
-    private final TP_Estimator estimator;
+    private final double k = 1.5; // Konstanta k sesuai aturan slide (1 <= k < 2)
 
     public TP_Ranker(Indexer indexer) {
         this.indexer = indexer;
-        this.estimator = new TP_Estimator(indexer);
     }
 
     public double score(String term, int docId) {
         int tf = indexer.getTf(term, docId);
         if (tf == 0) return 0.0;
 
-        TP_Param p = estimator.estimate(term);
-        double lambda1 = p.getLambda1();
-        double lambda2 = p.getLambda2();
-        double pi = p.getPi();
+        int N = indexer.getN();
+        int df = indexer.getDf(term);
 
-        return Math.log(pi / (1.0 - pi)) + tf * Math.log(lambda1 / lambda2) - (lambda1 - lambda2);
+        // Menggunakan standard IDF sebagai w_t (bobot term)
+        double wt = Math.log((N - df + 0.5) / (df + 0.5) + 1.0);
+
+        // Rumus sesuai Slide Two Poisson Model (2):
+        // rel = (f_{t,D} * (k + 1) * w_t) / (f_{t,D} + k)
+        return (tf * (k + 1) * wt) / (tf + k);
     }
 
-    /**
-     * Ranks all documents for the given query terms using the Two-Poisson model.
-     *
-     * @param queryTerms list of tokenized query terms
-     * @return Map of docId -> score, sorted descending (full ranking)
-     */
     public Map<Integer, Double> rank(List<String> queryTerms) {
         Map<Integer, Double> scores = new HashMap<>();
         for (Integer docId : indexer.getDocIds()) {
@@ -45,13 +41,6 @@ public class TP_Ranker {
         return TP_Util.sort(scores);
     }
 
-    /**
-     * Ranks documents and returns only the top-k results as ScoredDoc list,
-     * matching the BIMEngine / BM11Engine style for use with Main and Evaluator.
-     *
-     * @param query raw query string (will be tokenized)
-     * @param topK  number of top results to return
-     */
     public List<ScoredDoc> search(String query, int topK) {
         List<String> queryTerms = new Tokenizer().tokenize(query);
         Map<Integer, Double> ranked = rank(queryTerms);
@@ -64,6 +53,5 @@ public class TP_Ranker {
         return result;
     }
 
-    /** A document id paired with its Two-Poisson score. */
     public record ScoredDoc(int docId, double score) {}
 }

@@ -7,8 +7,8 @@ import java.util.Map;
 public class BM25 {
 
     private final Indexer indexer;
-    private double k1 = 1.2;
-    private double b = 0.75;
+    private double k1 = 1.2; // Parameter k dari Two-Poisson / BM
+    private double b = 0.75; // Nilai b default yang umum dipakai sesuai slide
 
     public BM25(Indexer indexer) {
         this.indexer = indexer;
@@ -31,17 +31,19 @@ public class BM25 {
         int dl = indexer.getDocLength(docId);
         double avgdl = indexer.getAvgdl();
 
-        double idf = Math.log((N - df + 0.5) / (df + 0.5) + 1);
-        double norm = tf + k1 * (1 - b + b * (dl / avgdl));
-        return idf * ((tf * (k1 + 1)) / norm);
+        // w_t menggunakan standard Robertson-Spärck Jones / BM25 IDF
+        double wt = Math.log((N - df + 0.5) / (df + 0.5) + 1.0);
+
+        // Rumus penyebut eksak sesuai slide Intro (2) BM25:
+        // f_{t,D} + ( (k1 * l_d) / l_avg ) * b + k1 * (1 - b)
+        double bm11Component = ((k1 * dl) / avgdl) * b;
+        double twoPoissonComponent = k1 * (1 - b);
+        double norm = tf + bm11Component + twoPoissonComponent;
+
+        // Pembilang: f_{t,D} * (k1 + 1) * w_t
+        return (tf * (k1 + 1) * wt) / norm;
     }
 
-    /**
-     * Ranks the documents based on the input using BM25.
-     *
-     * @param queryTerms list of the query
-     * @return Map of the docID to the score, sorted descending (full ranking)
-     */
     public Map<Integer, Double> rank(List<String> queryTerms) {
         Map<Integer, Double> scores = new HashMap<>();
         for (Integer docId : indexer.getDocIds()) {
@@ -56,13 +58,6 @@ public class BM25 {
         return sort(scores);
     }
 
-    /**
-     * Ranks documents and returns only the top-k results as ScoredDoc list,
-     * matching the BIMEngine / BM11Engine style for use with Main and Evaluator.
-     *
-     * @param query raw query string (will be tokenized)
-     * @param topK  number of top results to return
-     */
     public List<ScoredDoc> search(String query, int topK) {
         List<String> queryTerms = new Tokenizer().tokenize(query);
         Map<Integer, Double> ranked = rank(queryTerms);
@@ -85,6 +80,5 @@ public class BM25 {
         return result;
     }
 
-    /** A document id paired with its BM25 score. */
     public record ScoredDoc(int docId, double score) {}
 }
