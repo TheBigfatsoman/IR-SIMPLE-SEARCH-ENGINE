@@ -170,7 +170,7 @@ public class Evaluator {
         System.out.println();
 
         // ── 11-Point Interpolated Average Precision ───────────────────────────
-        System.out.println("\n11-Point Interpolated Average Precision (" + modelName + "):");
+        System.out.println("\n11-Point Interpolated Precision (" + modelName + "):");
         System.out.printf("%-8s", "Recall");
         for (double r : RECALL_LEVELS) System.out.printf(" %4.1f ", r);
         System.out.println();
@@ -178,7 +178,6 @@ public class Evaluator {
         double[] avgInterp = averageInterpolated(allInterpolated);
         for (double v : avgInterp) System.out.printf(" %.3f", v);
         System.out.println();
-        System.out.printf("Mean Average Precision (MAP) = %.4f%n", mean(allPrecisions));
         System.out.println("=".repeat(65));
     }
 
