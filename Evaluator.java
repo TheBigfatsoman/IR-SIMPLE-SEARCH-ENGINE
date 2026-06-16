@@ -98,16 +98,6 @@ public class Evaluator {
 
     // ── public API ────────────────────────────────────────────────────────────
 
-    /**
-     * Evaluate any ranking model across all queries that have qrel judgments.
-     * Prints averages and the 11-point interpolated precision table to stdout.
-     * Optionally prints the full per-query table.
-     *
-     * @param engine     a (query, topK) -> List&lt;ScoredDoc&gt; search function
-     * @param modelName  display name (e.g. "BIM", "BM25", "Two-Poisson")
-     * @param topK       max documents to retrieve per query
-     * @param printTable whether to print the full per-query table
-     */
     public void evaluate(ScoredSearch engine, String modelName, int topK, boolean printTable) {
         System.out.println("\n" + "=".repeat(65));
         System.out.println("  EVALUASI MODEL: " + modelName);
