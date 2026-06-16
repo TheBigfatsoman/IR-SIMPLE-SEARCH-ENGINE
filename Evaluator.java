@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.*;
-
+ 
 /**
  * Peran 1 - IR Evaluation Module
  *
@@ -114,12 +114,10 @@ public class Evaluator {
         evalQueryIds.retainAll(qrels.keySet());
         Collections.sort(evalQueryIds);
 
-        if (printTable) {
-            System.out.printf("%-8s %-10s %-10s", "QueryID", "Precision", "Recall");
-            for (int k : K_VALUES) System.out.printf(" P@%-4d", k);
-            System.out.println();
-            System.out.println("-".repeat(65));
-        }
+        System.out.printf("%-8s %-10s %-10s", "QueryID", "Precision", "Recall");
+        for (int k : K_VALUES) System.out.printf(" P@%-4d", k);
+        System.out.println();
+        System.out.println("-".repeat(65));
 
         for (int qId : evalQueryIds) {
             String queryText      = queries.get(qId);
